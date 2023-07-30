@@ -437,6 +437,19 @@ Call CALLBACK with results."
      (format "{\"tracks\": [ %s ]}" tracks)
      callback)))
 
+(defun smudge-api-remove-saved-track (user-id track-id callback)
+  (smudge-api-remove-saved-tracks user-id (list track-id) callback))
+
+(defun smudge-api-remove-saved-tracks (track-ids callback)
+  (let ((tracks (format "%s" (mapconcat
+                              (lambda (x) (format "{\"uri\": %s}" (smudge-api-format-id "track" x)))
+                              track-ids ","))))
+    (smudge-api-call-async
+     "DELETE"
+     "/me/tracks"
+     (format "{\"tracks\": [ %s ]}" tracks)
+     callback)))
+
 (defun smudge-api-playlist-follow (playlist callback)
   "Add the current user as a follower of PLAYLIST.
 Call CALLBACK with results."
@@ -525,6 +538,7 @@ Parameter must be a number between 0 and 100."
                                      nil t))
      nil
      callback)))
+
 
 (defun smudge-api-device-list (callback)
   "Call CALLBACK with the list of devices available for use with Spotify Connect."

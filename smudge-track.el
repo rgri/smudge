@@ -313,5 +313,14 @@ Default to sortin tracks by number when listing the tracks from an album."
            (message "Song removed."))))
     (message "Cannot remove a track from a playlist from here")))
 
+(defun smudge-saved-track-remove ()
+  (interactive)
+  (let ((selected-track (tabulated-list-get-id)))
+   (smudge-api-remove-saved-track
+       (smudge-api-get-item-uri selected-track)
+               (lambda (_)
+               (message "Song removed."))
+    )))
+
 (provide 'smudge-track)
 ;;; smudge-track.el ends here
