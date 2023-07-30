@@ -85,6 +85,19 @@
       (smudge-track-search-mode)
       (smudge-track-saved-tracks-update 1))))
 
+;TODO: Add a way to remove saved tracks. See the relevant branch.
+(defun smudge-save-current-track ()
+  "Save the currently playing track."
+  (interactive)
+  (smudge-api-get-player-status
+   (lambda (status)
+     (let ((trackid (gethash 'id (gethash 'item status))))
+       (smudge-api-call-async
+        "PUT"
+        (format  "/me/tracks?ids=%s" trackid)
+        nil
+        nil)))))
+
 ;;;###autoload
 (defun smudge-my-playlists ()
   "Display the current user's playlists."
